@@ -1,18 +1,16 @@
-bond = true
-
-
-spawn(function()
+task.spawn(function()
     while true do
-        if bond then
-            local sssss = game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("RemotePromise"):WaitForChild("Remotes"):WaitForChild("C_ActivateObject")
-            local runtimeItems = game:GetService("Workspace"):WaitForChild("RuntimeItems")
+        local activateRemote = game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Network"):WaitForChild("RemotePromise"):WaitForChild("Remotes"):FindFirstChild("C_ActivateObject")
 
-            for _, v in pairs(runtimeItems:GetChildren()) do
-                if v.Name == "Bond" or v.Name == "Bonds" then
-                    sssss:FireServer(v)
+        if activateRemote then
+            local runtimeItems = game.Workspace:WaitForChild("RuntimeItems")
+
+            for _, bond in pairs(runtimeItems:GetChildren()) do
+                if bond:IsA("Model") and (bond.Name == "Bond" or bond.Name == "Bonds") and bond.PrimaryPart then
+                    activateRemote:FireServer(bond)
                 end
             end
         end
-        task.wait()
+        task.wait(0.3) -- Adding delay between activations
     end
 end)
